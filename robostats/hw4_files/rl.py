@@ -29,9 +29,21 @@ def value_iteration(env, gamma, max_iterations=int(1e3), tol=1e-3):
     value_function:  Optimal value function
     iteration: number of iterations it took to converge.
   """
-
-  ## YOUR CODE HERE ##
-  raise NotImplementedError()
+  delta = 0
+  for round in range(max_iterations):
+    vPrev = np.zeros(env.nS)
+    for state in env._state_space:
+      maxAct = 0
+      for action in env._action_space:
+        currAct = np.sum(env.P[state][action][0]*(env.P[state][action][2]+gamma*vPrev))
+        if currAct > maxAct:
+          maxAct = currAct
+      vS[state] = maxAct
+      if delta < np.abs(vPrev-vS[state]):
+        delta = np.abs(vPrev-vS[state])
+      vPrev = vS[state]
+      if delta < tol:
+        return vS, round
 
 def policy_from_value_function(env, value_function, gamma):
   """
@@ -54,9 +66,13 @@ def policy_from_value_function(env, value_function, gamma):
     policy: Array of integers where each element is the optimal action to take
       from the state corresponding to that index.
   """
-
-  ## YOUR CODE HERE ##    
-  raise NotImplementedError()
+  policy = np.zeros(env.nS)
+  for state in env._state_space:
+    polActions = np.zeros(env.nA)
+    for action in env._action_space:
+      polActions[action] = np.sum(env.P[state][action][0]*(env.P[state][action][2]+gamma*value_function))
+    policy[state] = np.argmax(polActions)
+  return policy
 
 def policy_iteration(env, gamma, max_iterations=int(1e3), tol=1e-3):
   """
@@ -109,8 +125,12 @@ def td_zero(env, gamma, policy, alpha):
     numpy.ndarray
     value_function:  Policy value function
   """
+  #Vpi = 0
+  #for state in env._state_space:
 
-  ## YOUR CODE HERE ##
+    #update =
+    #Vpi = Vpi + alpha*rest
+
   raise NotImplementedError()
 
 def n_step_td(env, gamma, policy, alpha, n):
@@ -141,6 +161,17 @@ def n_step_td(env, gamma, policy, alpha, n):
   ## YOUR CODE HERE ##
   raise NotImplementedError()
 
+def visVals(Vs, width, height):
+  fig, ax = plt.subplots()
+  visualize = np.reshape(Vs, (width, height))
+  img = ax.imshow(visualize)
+
+  for row in range(len(visualize)):
+    for col in range(len(visualize)):
+      text = ax.text(col, row, round(vis[row, col], 2), ha="center", va="center", color="w")
+  plt.title('Values')
+  plt.show()
+
 if __name__ == "__main__":
   env = gridworld.GridWorld(map_name='8x8')
 
@@ -153,6 +184,7 @@ if __name__ == "__main__":
   V_vi, n_iter = value_iteration(env, gamma)
   policy = policy_from_value_function(env, Vs, gamma)
 
+  visVals(V_vi, 8, 8)
   # Q3.2.2: BONUS
   # V_pi, n_iter = policy_iteration(env, gamma)
 
