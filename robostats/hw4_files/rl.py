@@ -132,26 +132,22 @@ if __name__ == "__main__":
   env = gridworld.GridWorld(map_name='8x8')
 
   # Play around with these values if you want!
-  gamma = 0.9
+  gamma = 1.06
   alpha = 0.05
   n = 10
   
   # Q3.2.1
   V_vi, n_iter = value_iteration(env, gamma)
-  print V_vi
-
-  #visVals(V_vi, 8, 8)
+  visVals(V_vi, 8, 8)
 
   policy = policy_from_value_function(env, V_vi, gamma)
-  print policy
-  #visVals(policy, 8, 8)
+  visVals(policy, 8, 8)
 
   # Q3.2.2: BONUS
   # V_pi, n_iter = policy_iteration(env, gamma)
 
   # Q3.2.3
   V_td = td_zero(env, gamma, policy, alpha)
-  print V_td
   visVals(V_td, 8, 8)
 
 #V_vi:

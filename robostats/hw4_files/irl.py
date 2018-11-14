@@ -71,7 +71,7 @@ if __name__ == "__main__":
   env = gridworld.GridWorld(map_name='8x8')
 
   # Generate policy from Q3.2.1
-  gamma = 0.9
+  gamma = 0.75
   Vs, n_iter = rl.value_iteration(env, gamma)
   policy = rl.policy_from_value_function(env, Vs, gamma)
 
@@ -82,6 +82,8 @@ if __name__ == "__main__":
   R_max = 1
   l1 = 0.8
   R = irl_lp(policy, T, gamma, R_max, l1)
+  visVals(R, 8, 8)
+   
 
   # You can test out your R by re-running VI with your new rewards as follows:
   env_irl = gridworld.GridWorld(map_name='8x8', R=R)
